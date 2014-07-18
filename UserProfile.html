@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="fbApp"><head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Friendster</title>
+    <meta name="generator" content="Bootply">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="profilecss/bootstrap.css" rel="stylesheet">
+    <link href="" type="text/css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="http://www.bootply.com/bootstrap/img/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.bootply.com/bootstrap/img/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="http://www.bootply.com/bootstrap/img/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="http://www.bootply.com/bootstrap/img/apple-touch-icon-114x114.png">
+
+    <!-- CSS code from Bootply.com editor -->
+
+    <style type="text/css">
+        body {
+            padding-top: 51px;
+        }
+        .text-center {
+            padding-top: 20px;
+        }
+        .col-xs-12 {
+            background-color: #fff;
+        }
+        #sidebar {
+            height: 100%;
+            padding-right: 0;
+            padding-top: 20px;
+        }
+        #sidebar .nav {
+            width: 95%;
+        }
+        #sidebar li {
+            border:0 #f2f2f2 solid;
+            border-bottom-width:1px;
+        }
+
+        /* collapsed sidebar styles */
+        @media screen and (max-width: 767px) {
+            .row-offcanvas {
+                position: relative;
+                -webkit-transition: all 0.25s ease-out;
+                -moz-transition: all 0.25s ease-out;
+                transition: all 0.25s ease-out;
+            }
+            .row-offcanvas-right
+            .sidebar-offcanvas {
+                right: -41.6%;
+            }
+
+            .row-offcanvas-left
+            .sidebar-offcanvas {
+                left: -41.6%;
+            }
+            .row-offcanvas-right.active {
+                right: 41.6%;
+            }
+            .row-offcanvas-left.active {
+                left: 41.6%;
+            }
+            .sidebar-offcanvas {
+                position: absolute;
+                top: 0;
+                width: 41.6%;
+            }
+            #sidebar {
+                background-color:#3b3b3b;
+                padding-top:0;
+            }
+            #sidebar .nav>li {
+                color: #ddd;
+                background: linear-gradient(#3E3E3E, #383838);
+                border-top: 1px solid #484848;
+                border-bottom: 1px solid #2E2E2E;
+            }
+            #sidebar .nav>li:first-child {
+                border-top:0;
+            }
+            #sidebar .nav>li>a {
+                color: #ddd;
+            }
+            #sidebar .nav>li>a>img {
+                max-width: 14px;
+            }
+            #sidebar .nav>li>a:hover, #sidebar .nav>li>a:focus {
+                text-decoration: none;
+                background: linear-gradient(#373737, #323232);
+                color: #fff;
+            }
+            #sidebar .nav .caret {
+                border-top-color: #fff;
+                border-bottom-color: #fff;
+            }
+            #sidebar .nav a:hover .caret{
+                border-top-color: #fff;
+                border-bottom-color: #fff;
+            }
+        }
+
+
+    </style>
+
+    <script src="angular.js"></script>
+    <script src="angular-route.js"></script>
+    <script src="DataController.js"></script>
+    <script type="text/javascript" src="expando.js"></script>
+
+<script>
+    function validateMyForm(){
+        var data = {_id:window.localStorage.getItem('userId')};
+
+            $.ajax({
+                type: "POST",
+                url: '/logout',
+                data: data,
+                success: function(data, status){
+                    console.log("success call ------" + JSON.stringify(data));
+
+                }
+            });
+    }
+</script>
+        </head>
+
+<!-- HTML code from Bootply.com editor -->
+
+<body ng-controller="mainController">
+
+<div class="page-container">
+
+    <!-- top navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-left: -90px">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Welcome to Friendster</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <input type="button" onclick="validateMyForm()" value="Logout" style="margin-top: 10px">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row row-offcanvas row-offcanvas-left">
+            <img class="img-responsive" src="img/F_profile.jpeg" alt="" style="margin-left: -70px">
+            </div>
+        </br>
+            <p>{{userName}}</p>
+            <!-- sidebar -->
+            <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation" style="margin-left: -70px">
+                <ul class="nav">
+                    <li class="active"><a href="#Home">Home</a></li>
+                    <li><a href="#Profile">Profile</a></li>
+                    <li><a href="#Friend">Friends</a></li>
+                </ul>
+            </div>
+
+            <!-- main area -->
+            <div class="col-xs-12 col-sm-9" style="background-color: #edf0f5; height: 700px; margin-top: -225px">
+                <div id="main">
+
+                    <div ng-view></div>
+
+                    <!-- angular templating -->
+                    <!-- this is where content will be injected -->
+                </div>
+            </div><!-- /.col-xs-12 main -->
+        </div><!--/.row-->
+    </div><!--/.container-->
+</div><!--/.page-container-->
+
+<script type="text/javascript" async="" src="profilecss/quant.js"></script><script src="profilecss/analytics.js" async=""></script><script type="text/javascript" src="profilecss/jquery.js"></script>
+
+
+<script type="text/javascript" src="profilecss/bootstrap.js"></script>
+
+
+
+
+
+
+
+<!-- JavaScript jQuery code from Bootply.com editor  -->
+<!--
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $('[data-toggle=offcanvas]').click(function() {
+            $('.row-offcanvas').toggleClass('active');
+        });
+    });
+
+</script>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-40413119-1', 'bootply.com');
+    ga('send', 'pageview');
+</script>
+&lt;!&ndash; Quantcast Tag &ndash;&gt;
+<script type="text/javascript">
+    var _qevents = _qevents || [];
+
+    (function() {
+        var elem = document.createElement('script');
+        elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
+        elem.async = true;
+        elem.type = "text/javascript";
+        var scpt = document.getElementsByTagName('script')[0];
+        scpt.parentNode.insertBefore(elem, scpt);
+    })();
+
+    _qevents.push({
+        qacct:"p-0cXb7ATGU9nz5"
+    });
+</script>-->
+
+</body></html>

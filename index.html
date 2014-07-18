@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Friendster</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="css/freelancer.css" rel="stylesheet" type="text/css">
+
+    <!-- Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+
+    <!-- IE8 support for HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="angular.js"></script>
+    <script src="angular-route.js"></script>
+    <script src="DataController.js"></script>
+    <scrip> src=</scrip>
+    <script>
+        function validateMyForm(){
+            var userName = $('#userName').val();
+            var password = $('#password').val();
+
+            if(userName != undefined && userName != "" && password != undefined && password != ""){
+                var data = {
+                    userName:userName,
+                    password:password
+                };
+                $.ajax({
+                    type: "POST",
+                    url: '/login',
+                    data: data,
+                    success: function(data, status){
+                        if(data.status == 1) {
+                          window.location.href = "UserProfile.html";
+                        }else{
+                            alert('Wrong User Name/Password');
+                        }
+                    }
+                });
+            }else{
+                alert('Please enter User Name/ Password');
+            }
+        }
+
+        function addUser(){
+            var firstName = $('#inputFirstName').val();
+            var lastName = $('#inputLastName').val();
+            var email = $('#inputEmail').val();
+            var reEmail = $('#inputReEmail').val();
+            var password = $('#inputPassword').val();
+            var dateOfBirth = $('#day').val() + "-" + $('#month').val() + "-" + $('#year').val();
+            var gender = $('input:radio:checked').val();
+            var data = {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password,
+                dateOfBirth: dateOfBirth,
+                gender: gender
+            };
+
+            $.ajax({
+                type: "POST",
+                url: '/submit',
+                data: data,
+                success: function(data, status){
+                        console.log(data);
+                    if(data.status == 1) {
+                        alert('Congrats you are added successfully in Friendster circule.....');
+                    }else{
+                        alert('Some error occrued to add a new user....');
+                    }
+                }
+            });
+
+
+        }
+
+        function clearUserData(){
+           /* $('#inputFirstName').setValue("");
+            $('#inputLastName').setValue("");
+            $('#inputEmail').setValue("");
+            $('#inputReEmail').setValue("");
+            $('#inputPassword').setValue("");
+*/
+        }
+
+    </script>
+
+
+</head>
+
+<body id="page-top" class="index" onload="ImageBook()">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#page-top">Friendster</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+
+                        <table>
+                            <tr>
+                                <td>
+                                    <input id="userName" name="UserName" type="text" style="width: 180px" placeholder="User Name">
+
+                                </td>
+                                <td>
+                                    <p>""</p>
+                                </td>
+                                <td style="margin: 4px">
+                                    <input id="password" name="Password" type="password" style="width: 180px" placeholder="Password">
+                                </td>
+                                <td>
+                                    <p>""</p>
+                                </td>
+                                <td>
+                                    <input type="button" value="Log In" onclick="validateMyForm()">
+                                </td>
+
+                            </tr>
+                        </table>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    <header style="background-color: #edf0f5">
+        <div class="container" style="background-color: #edf0f5 ; margin-top: -90px">
+            <div class="row">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <script type="text/javascript">
+
+                            /***********************************************
+                             * Book Flip slideshow script- © Ger Versluis 2003
+                             * Permission granted to DynamicDrive.com to feature script
+                             * This notice must stay intact for use
+                             * Visit http://www.dynamicdrive.com/ for full source code
+                             ***********************************************/
+
+                            /********************************************************
+                             Create a div with transparent place holder in your html
+                             <div id="Book" style="position:relative">
+                             <img src="placeholder.gif" width="144" height="227">
+                             </div>
+                             width = 2*book image width +4 height = book image height+2
+
+                             Insert onload in body tag
+                             <body onload="ImageBook()">
+                             *********************************************************/
+
+// 7 variables to control behavior
+                            var Book_Image_Width=250;
+                            var Book_Image_Height=350;
+                            var Book_Border=true;
+                            var Book_Border_Color="gray";
+                            var Book_Speed=15;
+                            var Book_NextPage_Delay=1500; //1 second=1000
+                            var Book_Vertical_Turn=0;
+
+                            // array to specify images and optional links. At least 4
+                            // If Link is not needed keep it ""
+
+                            Book_Image_Sources=new Array(
+                                    "img/images101.jpeg","",
+                                    "img/images102.jpeg","",
+                                    "img/images103.jpeg","", //this slide isn't linked
+                                    "img/images104.jpeg","" // NOTE No comma after last line
+                            );
+
+                            /***************** DO NOT EDIT BELOW **********************************/
+                            var B_LI,B_MI,B_RI,B_TI,B_Angle=0,B_CrImg=6,B_MaxW,B_Direction=1;
+                            var B_MSz,B_Stppd=false;B_Pre_Img=new Array(Book_Image_Sources.length);
+
+                            function ImageBook(){
+                                if(document.getElementById){
+                                    for(i=0;i<Book_Image_Sources.length;i+=2){
+                                        B_Pre_Img[i]=new Image();B_Pre_Img[i].src=Book_Image_Sources[i]}
+                                    Book_Div=document.getElementById("Book");
+                                    B_LI=document.createElement("img");Book_Div.appendChild(B_LI);
+                                    B_RI=document.createElement("img");Book_Div.appendChild(B_RI);
+                                    B_MI=document.createElement("img");Book_Div.appendChild(B_MI);
+                                    B_LI.style.position=B_MI.style.position=B_RI.style.position="absolute";
+                                    B_LI.style.zIndex=B_RI.style.zIndex=0;B_MI.style.zIndex=1;
+                                    B_LI.style.top=(Book_Vertical_Turn?Book_Image_Height+1:0)+"px";
+                                    B_LI.style.left=0+"px";
+                                    B_MI.style.top=0+"px";
+                                    B_MI.style.left=(Book_Vertical_Turn?0:Book_Image_Width+1)+"px";
+                                    B_RI.style.top=0+"px";
+                                    B_RI.style.left=(Book_Vertical_Turn?0:Book_Image_Width+1)+"px";
+                                    B_LI.style.height=Book_Image_Height+"px";
+                                    B_MI.style.height=Book_Image_Height+"px";
+                                    B_RI.style.height=Book_Image_Height+"px";
+                                    B_LI.style.width=Book_Image_Width+"px";
+                                    B_MI.style.width=Book_Image_Width+"px";
+                                    B_RI.style.width=Book_Image_Width+"px";
+                                    if(Book_Border){
+                                        B_LI.style.borderStyle=B_MI.style.borderStyle=B_RI.style.borderStyle="solid";
+                                        B_LI.style.borderWidth=1+"px";
+                                        B_MI.style.borderWidth=1+"px";
+                                        B_RI.style.borderWidth=1+"px";
+                                        B_LI.style.borderColor=B_MI.style.borderColor=B_RI.style.borderColor=Book_Border_Color}
+                                    B_LI.src=B_Pre_Img[0].src;
+                                    B_LI.lnk=Book_Image_Sources[1];
+                                    B_MI.src=B_Pre_Img[2].src;
+                                    B_MI.lnk=Book_Image_Sources[3];
+                                    B_RI.src=B_Pre_Img[4].src;
+                                    B_RI.lnk=Book_Image_Sources[5];
+                                    B_LI.onclick=B_MI.onclick=B_RI.onclick=B_LdLnk;
+                                    B_LI.onmouseover=B_MI.onmouseover=B_RI.onmouseover=B_Stp;
+                                    B_LI.onmouseout=B_MI.onmouseout=B_RI.onmouseout=B_Rstrt;
+                                    BookImages()}}
+
+                            function BookImages(){
+                                if(!B_Stppd){
+                                    if(Book_Vertical_Turn){
+                                        B_MSz=Math.abs(Math.round(Math.cos(B_Angle)*Book_Image_Height));
+                                        MidOffset=!B_Direction?Book_Image_Height+1:Book_Image_Height-B_MSz;
+                                        B_MI.style.top=MidOffset+"px";
+                                        B_MI.style.height=B_MSz+"px"}
+                                    else{	B_MSz=Math.abs(Math.round(Math.cos(B_Angle)*Book_Image_Width));
+                                        MidOffset=B_Direction?Book_Image_Width+1:Book_Image_Width-B_MSz;
+                                        B_MI.style.left=MidOffset+"px";
+                                        B_MI.style.width=B_MSz+"px"}
+                                    B_Angle+=Book_Speed/720*Math.PI;
+                                    if(B_Angle>=Math.PI/2&&B_Direction){
+                                        B_Direction=0;
+                                        if(B_CrImg==Book_Image_Sources.length)B_CrImg=0;
+                                        B_MI.src=B_Pre_Img[B_CrImg].src;
+                                        B_MI.lnk=Book_Image_Sources[B_CrImg+1];
+                                        B_CrImg+=2}
+                                    if(B_Angle>=Math.PI){
+                                        B_Direction=1;
+                                        B_TI=B_LI;
+                                        B_LI=B_MI;
+                                        B_MI=B_TI;
+                                        if(Book_Vertical_Turn)B_MI.style.top=0+"px";
+                                        else B_MI.style.left=Book_Image_Width+1+"px";
+                                        B_MI.src=B_RI.src;
+                                        B_MI.lnk=B_RI.lnk;
+
+                                        setTimeout("Book_Next_Delay()",Book_NextPage_Delay)}
+                                    else setTimeout("BookImages()",50)}
+                                else setTimeout("BookImages()",50)}
+
+                            function Book_Next_Delay(){
+                                if(B_CrImg==Book_Image_Sources.length)B_CrImg=0;
+                                B_RI.src=B_Pre_Img[B_CrImg].src;
+                                B_RI.lnk=Book_Image_Sources[B_CrImg+1];
+                                B_MI.style.zIndex=2;
+                                B_LI.style.zIndex=1;
+                                B_Angle=0;
+                                B_CrImg+=2;
+                                setTimeout("BookImages()",50)}
+
+                            function B_LdLnk(){if(this.lnk)window.location.href=this.lnk}
+                            function B_Stp(){B_Stppd=true;this.style.cursor=this.lnk?"pointer":"default"}
+                            function B_Rstrt(){B_Stppd=false}
+                        </script>
+
+                        <div id="Book" style="position:relative; margin-top: 25px">
+                            <img src="img/placeholder.gif" width="400px" height="350px">
+                            <p style="color: #3B5998; margin-left: -55px">Connect with friends and the
+                                world around you on Friendster. </p>
+                        </div>
+
+                    </td>
+                    <td class="nav navbar-nav navbar-right">
+                        <div class="col-lg-12">
+                            <div id="main">
+                                <div class="col-lg-6">
+                                    <div class="well bs-component">
+                                        <div style="width: 400px">
+                                            <fieldset>
+                                                <legend>Sign Up</legend>
+                                                <div class="form-group">
+                                                    <!--
+                                                                                                <label for="inputEmail1" class="col-lg-2 control-label">Name</label>
+                                                    -->
+                                                    <div class="col-lg-10">
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    <input class="form-control" id="inputFirstName" placeholder="First Name" type="text">
+
+                                                                </td>
+                                                                <td>
+                                                                    <input class="form-control" id="inputSecondName" placeholder="Last Name" type="text">
+
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="form-group">
+                                                     &lt;!&ndash; <label for="inputEmail" class="col-lg-2 control-label">Email</label>&ndash;&gt;
+                                            <div class="col-lg-10">
+                                            </div>
+                                        </div>-->
+                                                <div class="form-group">
+                                                    <!-- <label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
+                                                    <div class="col-lg-10">
+                                                        <input class="form-control" id="inputEmail" placeholder="Your Email" type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <!-- <label for="inputEmail" class="col-lg-2 control-label">Email</label>-->
+                                                    <div class="col-lg-10">
+                                                        <input class="form-control" id="inputReEmail" placeholder="Re-enter Email" type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <!--<label for="inputPassword" class="col-lg-2 control-label">Password</label>-->
+                                                    <div class="col-lg-10">
+                                                        <input class="form-control" id="inputPassword" placeholder="New Password" type="password">
+                                                        <!--<div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox"> Checkbox
+                                                            </label>
+                                                        </div>-->
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-lg-10">
+                                                        <div class="radio">
+                                                            <label>
+                                                                <input name="optionsRadios" id="optionsRadios1"  value='Male' checked="checked" type="radio">
+                                                                Male
+                                                            </label>
+                                                        </div>
+                                                        <div class="radio">
+                                                            <label>
+                                                                <input name="optionsRadios" id="optionsRadios2"  value='Female' type="radio" style="color: blue">
+                                                                FeMale
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <!--
+                                                                                                <label for="select" class="col-lg-2 control-label">Selects</label>
+                                                    -->
+                                                    <div class="col-lg-10">
+
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <select style="width: 100px" class="form-control" id="month">
+                                                                    <option selected="selected">Month</option>
+                                                                    <option>Jan</option>
+                                                                    <option>Feb</option>
+                                                                    <option>Mar</option>
+                                                                    <option>May</option>
+                                                                    <option>June</option>
+                                                                    <option>July</option>
+                                                                    <option>Aug</option>
+                                                                    <option>Sep</option>
+                                                                    <option>Oct</option>
+                                                                    <option>Nov</option>
+                                                                    <option>Dec</option>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <select style="width: 100px" class="form-control" id="day">
+                                                                    <option selected="selected">Day</option>
+                                                                    <option>1</option>
+                                                                    <option>2</option>
+                                                                    <option>3</option>
+                                                                    <option>4</option>
+                                                                    <option>5</option>
+                                                                    <option>6</option>
+                                                                    <option>7</option>
+                                                                    <option>8</option>
+                                                                    <option>9</option>
+                                                                    <option>10</option>
+                                                                    <option>11</option>
+                                                                    <option>12</option>
+                                                                    <option>13</option>
+                                                                    <option>14</option>
+                                                                    <option>15</option>
+                                                                    <option>16</option>
+                                                                    <option>17</option>
+                                                                    <option>18</option>
+                                                                    <option>19</option>
+                                                                    <option>20</option>
+                                                                    <option>21</option>
+                                                                    <option>22</option>
+                                                                    <option>23</option>
+                                                                    <option>24</option>
+                                                                    <option>25</option>
+                                                                    <option>26</option>
+                                                                    <option>27</option>
+                                                                    <option>28</option>
+                                                                    <option>29</option>
+                                                                    <option>30</option>
+                                                                    <option>31</option>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <select style="width: 100px" class="form-control" id="year">
+                                                                    <option selected="selected">Year</option>
+                                                                    <option>2014</option>
+                                                                    <option>2013</option>
+                                                                    <option>2012</option>
+                                                                    <option>2011</option>
+                                                                    <option>2010</option>
+                                                                    <option>2009</option>
+                                                                    <option>2008</option>
+                                                                    <option>2007</option>
+                                                                    <option>2006</option>
+                                                                    <option>2005</option>
+                                                                    <option>2004</option>
+                                                                    <option>2003</option>
+                                                                    <option>2002</option>
+                                                                    <option>2001</option>
+                                                                    <option>2000</option>
+                                                                    <option>1999</option>
+                                                                    <option>1998</option>
+                                                                    <option>1997</option>
+                                                                    <option>1996</option>
+                                                                    <option>1995</option>
+                                                                    <option>1994</option>
+                                                                    <option>1993</option>
+                                                                    <option>1992</option>
+                                                                    <option>1991</option>
+                                                                    <option>1990</option>
+                                                                    <option>1989</option>
+                                                                    <option>1988</option>
+                                                                    <option>1987</option>
+                                                                    <option>1986</option>
+                                                                    <option>1985</option>
+                                                                    <option>1984</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-lg-10 col-lg-offset-2">
+                                                        </br>
+                                                        <button onclick="clearUserData()" class="btn btn-default">Cancel</button>
+                                                        <button onclick="addUser()" class="btn btn-primary">Sign Up</button>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            </div>
+        </div>
+    </header>
+
+    <footer class="text-center" style="background-color: #3B5998">
+        <div class="footer-above"  style="background-color: #3B5998">
+            <div class="container">
+                <div class="row">
+                    <div class="footer-col col-md-4">
+                        <h3>Location</h3>
+                        <p>IntelliGrape
+                            <br>NSEZ L-6 Noida</p>
+                    </div>
+                    <div class="footer-col col-md-4">
+                        <h3>Around the Web</h3>
+                        <ul class="list-inline">
+                            <li><a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-facebook"></i></a>
+                            </li>
+                            <li><a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-google-plus"></i></a>
+                            </li>
+                            <li><a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-twitter"></i></a>
+                            </li>
+                            <li><a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-linkedin"></i></a>
+                            </li>
+                            <li><a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-dribbble"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="footer-col col-md-4">
+                        <h3>About</h3>
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                       rubi.saini@intelligrape.com
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="scroll-top page-scroll visible-xs visble-sm">
+        <a class="btn btn-primary" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+
+    <!-- Portfolio Modals -->
+    <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Project Title</h2>
+                            <hr class="star-primary">
+                            <img src="img/portfolio/cabin.png" class="img-responsive img-centered" alt="">
+                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <ul class="list-inline item-details">
+                                <li>Client: <strong><a href="http://startbootstrap.com">Start Bootstrap</a></strong>
+                                </li>
+                                <li>Date: <strong><a href="http://startbootstrap.com">April 2014</a></strong>
+                                </li>
+                                <li>Service: <strong><a href="http://startbootstrap.com">Web Development</a></strong>
+                                </li>
+                            </ul>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Project Title</h2>
+                            <hr class="star-primary">
+                            <img src="img/portfolio/cake.png" class="img-responsive img-centered" alt="">
+                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <ul class="list-inline item-details">
+                                <li>Client: <strong><a href="http://startbootstrap.com">Start Bootstrap</a></strong>
+                                </li>
+                                <li>Date: <strong><a href="http://startbootstrap.com">April 2014</a></strong>
+                                </li>
+                                <li>Service: <strong><a href="http://startbootstrap.com">Web Development</a></strong>
+                                </li>
+                            </ul>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Project Title</h2>
+                            <hr class="star-primary">
+                            <img src="img/portfolio/circus.png" class="img-responsive img-centered" alt="">
+                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <ul class="list-inline item-details">
+                                <li>Client: <strong><a href="http://startbootstrap.com">Start Bootstrap</a></strong>
+                                </li>
+                                <li>Date: <strong><a href="http://startbootstrap.com">April 2014</a></strong>
+                                </li>
+                                <li>Service: <strong><a href="http://startbootstrap.com">Web Development</a></strong>
+                                </li>
+                            </ul>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Project Title</h2>
+                            <hr class="star-primary">
+                            <img src="img/portfolio/game.png" class="img-responsive img-centered" alt="">
+                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <ul class="list-inline item-details">
+                                <li>Client: <strong><a href="http://startbootstrap.com">Start Bootstrap</a></strong>
+                                </li>
+                                <li>Date: <strong><a href="http://startbootstrap.com">April 2014</a></strong>
+                                </li>
+                                <li>Service: <strong><a href="http://startbootstrap.com">Web Development</a></strong>
+                                </li>
+                            </ul>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-modal modal fade" id="portfolioModal5" tabindex="-1" role="dialog" aria-hidden="true"  style="background-color: #3B5998">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Project Title</h2>
+                            <hr class="star-primary">
+                            <img src="img/portfolio/safe.png" class="img-responsive img-centered" alt="">
+                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <ul class="list-inline item-details">
+                                <li>Client: <strong><a href="http://startbootstrap.com">Start Bootstrap</a></strong>
+                                </li>
+                                <li>Date: <strong><a href="http://startbootstrap.com">April 2014</a></strong>
+                                </li>
+                                <li>Service: <strong><a href="http://startbootstrap.com">Web Development</a></strong>
+                                </li>
+                            </ul>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-modal modal fade" id="portfolioModal6" tabindex="-1" role="dialog" aria-hidden="true"  style="background-color: #3B5998">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Project Title</h2>
+                            <hr class="star-primary">
+                            <img src="img/portfolio/submarine.png" class="img-responsive img-centered" alt="">
+                            <p>Use this area of the page to describe your project. The icon above is part of a free icon set by <a href="https://sellfy.com/p/8Q9P/jV3VZ/">Flat Icons</a>. On their website, you can download their free set with 16 icons, or you can purchase the entire set with 146 icons for only $12!</p>
+                            <ul class="list-inline item-details">
+                                <li>Client: <strong><a href="http://startbootstrap.com">Start Bootstrap</a></strong>
+                                </li>
+                                <li>Date: <strong><a href="http://startbootstrap.com">April 2014</a></strong>
+                                </li>
+                                <li>Service: <strong><a href="http://startbootstrap.com">Web Development</a></strong>
+                                </li>
+                            </ul>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="js/classie.js"></script>
+    <script src="js/cbpAnimatedHeader.js"></script>
+    <script src="js/freelancer.js"></script>
+
+</body>
+
+</html>

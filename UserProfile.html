@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="fbApp"><head>
+<html lang="en" ng-app="fbApp">
+<head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <title>Friendster</title>
     <meta name="generator" content="Bootply">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="jquery.js"></script>
+
     <link href="profilecss/bootstrap.css" rel="stylesheet">
     <link href="" type="text/css" rel="stylesheet">
     <!--[if lt IE 9]>
@@ -13,7 +16,8 @@
     <link rel="shortcut icon" href="http://www.bootply.com/bootstrap/img/favicon.ico">
     <link rel="apple-touch-icon" href="http://www.bootply.com/bootstrap/img/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="http://www.bootply.com/bootstrap/img/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="http://www.bootply.com/bootstrap/img/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="114x114"
+          href="http://www.bootply.com/bootstrap/img/apple-touch-icon-114x114.png">
 
     <!-- CSS code from Bootply.com editor -->
 
@@ -21,23 +25,28 @@
         body {
             padding-top: 51px;
         }
+
         .text-center {
             padding-top: 20px;
         }
+
         .col-xs-12 {
             background-color: #fff;
         }
+
         #sidebar {
             height: 100%;
             padding-right: 0;
             padding-top: 20px;
         }
+
         #sidebar .nav {
             width: 95%;
         }
+
         #sidebar li {
-            border:0 #f2f2f2 solid;
-            border-bottom-width:1px;
+            border: 0 #f2f2f2 solid;
+            border-bottom-width: 1px;
         }
 
         /* collapsed sidebar styles */
@@ -48,6 +57,7 @@
                 -moz-transition: all 0.25s ease-out;
                 transition: all 0.25s ease-out;
             }
+
             .row-offcanvas-right
             .sidebar-offcanvas {
                 right: -41.6%;
@@ -57,46 +67,57 @@
             .sidebar-offcanvas {
                 left: -41.6%;
             }
+
             .row-offcanvas-right.active {
                 right: 41.6%;
             }
+
             .row-offcanvas-left.active {
                 left: 41.6%;
             }
+
             .sidebar-offcanvas {
                 position: absolute;
                 top: 0;
                 width: 41.6%;
             }
+
             #sidebar {
-                background-color:#3b3b3b;
-                padding-top:0;
+                background-color: #3b3b3b;
+                padding-top: 0;
             }
-            #sidebar .nav>li {
+
+            #sidebar .nav > li {
                 color: #ddd;
                 background: linear-gradient(#3E3E3E, #383838);
                 border-top: 1px solid #484848;
                 border-bottom: 1px solid #2E2E2E;
             }
-            #sidebar .nav>li:first-child {
-                border-top:0;
+
+            #sidebar .nav > li:first-child {
+                border-top: 0;
             }
-            #sidebar .nav>li>a {
+
+            #sidebar .nav > li > a {
                 color: #ddd;
             }
-            #sidebar .nav>li>a>img {
+
+            #sidebar .nav > li > a > img {
                 max-width: 14px;
             }
-            #sidebar .nav>li>a:hover, #sidebar .nav>li>a:focus {
+
+            #sidebar .nav > li > a:hover, #sidebar .nav > li > a:focus {
                 text-decoration: none;
                 background: linear-gradient(#373737, #323232);
                 color: #fff;
             }
+
             #sidebar .nav .caret {
                 border-top-color: #fff;
                 border-bottom-color: #fff;
             }
-            #sidebar .nav a:hover .caret{
+
+            #sidebar .nav a:hover .caret {
                 border-top-color: #fff;
                 border-bottom-color: #fff;
             }
@@ -110,22 +131,22 @@
     <script src="DataController.js"></script>
     <script type="text/javascript" src="expando.js"></script>
 
-<script>
-    function validateMyForm(){
-        var data = {_id:window.localStorage.getItem('userId')};
+    <script>
+        function validateMyForm() {
+            var data = {_id: window.localStorage.getItem('userId')};
 
             $.ajax({
                 type: "POST",
                 url: '/logout',
                 data: data,
-                success: function(data, status){
+                success: function (data, status) {
                     console.log("success call ------" + JSON.stringify(data));
 
                 }
             });
-    }
-</script>
-        </head>
+        }
+    </script>
+</head>
 
 <!-- HTML code from Bootply.com editor -->
 
@@ -146,7 +167,25 @@
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <input type="button" onclick="validateMyForm()" value="Logout" style="margin-top: 10px">
+                    <table>
+                        <tr>
+                            <td>
+                                <li><a href="#FriendRequestView">Request</a></li>
+                            </td>
+                            <td width="5px">
+                            </td>
+                            <td>
+                                <li><a href="#MessageView">Message</a></li>
+
+                            </td>
+                            <td width="5px">
+                            </td>
+                            <td>
+                                <input type="button" ng-click="logoutUser()" value="Logout" style="margin-top: 10px">
+
+                            </td>
+                        </tr>
+                    </table>
                 </ul>
             </div>
         </div>
@@ -154,42 +193,42 @@
 
     <div class="container">
         <div class="row row-offcanvas row-offcanvas-left">
-            <img class="img-responsive" src="img/F_profile.jpeg" alt="" style="margin-left: -70px">
-            </div>
+            <img id="userProfilePic" class="img-responsive" src="img/F_profile.jpeg" alt="" style="margin-left: -70px">
+        </div>
         </br>
-            <p>{{userName}}</p>
-            <!-- sidebar -->
-            <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation" style="margin-left: -70px">
-                <ul class="nav">
-                    <li class="active"><a href="#Home">Home</a></li>
-                    <li><a href="#Profile">Profile</a></li>
-                    <li><a href="#Friend">Friends</a></li>
-                </ul>
+        <p>Hi {{main.user.userName}}</p>
+        <!-- sidebar -->
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation" style="margin-left: -70px">
+            <ul class="nav">
+                <li class="active"><a href="#Home">Home</a></li>
+                <li><a href="#Profile">Profile</a></li>
+                <li><a href="#Friend">Friends</a></li>
+            </ul>
+        </div>
+
+        <!-- main area -->
+        <div class="col-xs-12 col-sm-9" style="background-color: #edf0f5; height: 700px; margin-top: -225px">
+            <div id="main">
+
+                <div ng-view></div>
+
+                <!-- angular templating -->
+                <!-- this is where content will be injected -->
             </div>
-
-            <!-- main area -->
-            <div class="col-xs-12 col-sm-9" style="background-color: #edf0f5; height: 700px; margin-top: -225px">
-                <div id="main">
-
-                    <div ng-view></div>
-
-                    <!-- angular templating -->
-                    <!-- this is where content will be injected -->
-                </div>
-            </div><!-- /.col-xs-12 main -->
-        </div><!--/.row-->
-    </div><!--/.container-->
+        </div>
+        <!-- /.col-xs-12 main -->
+    </div>
+    <!--/.row-->
+</div>
+<!--/.container-->
 </div><!--/.page-container-->
 
-<script type="text/javascript" async="" src="profilecss/quant.js"></script><script src="profilecss/analytics.js" async=""></script><script type="text/javascript" src="profilecss/jquery.js"></script>
+<script type="text/javascript" async="" src="profilecss/quant.js"></script>
+<script src="profilecss/analytics.js" async=""></script>
+<script type="text/javascript" src="profilecss/jquery.js"></script>
 
 
 <script type="text/javascript" src="profilecss/bootstrap.js"></script>
-
-
-
-
-
 
 
 <!-- JavaScript jQuery code from Bootply.com editor  -->
@@ -230,4 +269,5 @@
     });
 </script>-->
 
-</body></html>
+</body>
+</html>

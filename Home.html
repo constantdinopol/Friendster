@@ -16,6 +16,20 @@
 
 </script>
         <div ng-app="fbApp" ng-controller="homeController">
+            <div style="width: 500px; align-self: center; margin-top: 10px; margin-left: 120px">
+                <textarea id="postAreaId" class="form-control" rows="4" cols="50" placeholder="What is in your mind?"></textarea>
+                <p></p>
+                <input class="btn btn-info" type="button" value="Post" ng-click="postMessage()" style="float: right"/>
+                <p></p>
+                <p></p>
+                <table width="500px">
+                    <tr ng-repeat="post in posts">
+                        <td>
+                            {{post.message}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
             <H4>My Memories....</H4>
             </br>
             <p>

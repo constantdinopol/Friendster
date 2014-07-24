@@ -1,46 +1,90 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<html lang="en">
+
+<head>
+    <script src="jquery.js"></script>
+
+  <script>
+      function editProfile(){
+         /* console.log('edit profile >>>>>>>>>>>>>  1   ');
+
+          var editButton = document.getElementById('editBtn');
+          var fName = document.getElementById('firstName');
+          var lName = document.getElementById('lastName');
+          var email = document.getElementById('emailId');
+          var homeTown = document.getElementById('homeTown');
+          var school = document.getElementById('school');
+          var workedAt = document.getElementById('workedAt');
+          if(editButton.value == 'Edit'){
+
+              fName.removeAttribute('disabled');
+              lName.removeAttribute('disabled');
+              email.removeAttribute('disabled');
+              homeTown.removeAttribute('disabled');
+              school.removeAttribute('disabled');
+              workedAt.removeAttribute('disabled');
+              editButton.value = 'Save';
+
+          }else{
+
+              fName.setAttribute('disabled', 'disabled');
+              lName.setAttribute('disabled','disabled');
+              email.setAttribute('disabled', 'disabled');
+              homeTown.setAttribute('disabled', 'disabled');
+              school.setAttribute('disabled', 'disabled');
+              workedAt.setAttribute('disabled', 'disabled');
+              editButton.value = 'Edit';
+
+          }
+          console.log('edit profile  in controller >>>>> 2  ');
+
+
+*/
+      }
+  </script>
+
 </head>
 <body>
-
-
-
+<div ng-app="fbApp" ng-controller="profileController">
+    <!--<script>
+        function editUserProfile(){
+            $('#firstName').removeAttribute('disabled');
+        }
+    </script>-->
 <form class="bs-component" style="width: 400px; margin-top: 20px; margin-left: 150px" >
-    <div class="nav navbar-nav navbar-right">
-        <input type="button" value="Edit" align="right">
-    </div>
-    </br>
-    <div class="form-group">
-        <label class="control-label" for="firstNmae">First Name</label>
-        <input disabled="disabled" class="form-control" id="firstNmae" placeholder="First Name" type="text">
-    </div>
-    <div class="form-group">
-        <label class="control-label" for="lastName">Last Name</label>
-        <input disabled="disabled" class="form-control" id="lastName" placeholder="Last Name" type="text">
-    </div>
+        <div class="nav navbar-nav navbar-right">
+            <input type="button" value="Edit" id="editBtn" align="right" ng-click="editUserProfile(this)">
+        </div>
+        </br>
+        <div class="form-group">
+            <label class="control-label" for="firstName">First Name</label>
+            <input disabled="disabled" class="form-control" id="firstName" placeholder="First Name" type="text" ng-model="main.user.firstName">
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="lastName">Last Name</label>
+            <input disabled="disabled" class="form-control" id="lastName" placeholder="Last Name" type="text" ng-model="main.user.lastName">
+        </div>
 
-    <div class="form-group">
-        <label class="control-label" for="emailId">Email Id</label>
-        <input disabled="disabled" class="form-control" id="emailId" type="text">
-    </div>
-    <div class="form-group">
-        <label class="control-label" for="emailId">My Home Town</label>
-        <input disabled="disabled" class="form-control" id="homeTown" type="text">
-    </div>
-    <div class="form-group">
-        <label class="control-label" for="emailId">My School</label>
-        <input disabled="disabled" class="form-control" id="school" type="text">
-    </div>
-    <div class="form-group">
-        <label class="control-label" for="emailId">Worked At</label>
-        <input disabled="disabled" class="form-control" id="workedAt" type="text">
-    </div>
-</form>
+        <div class="form-group">
+            <label class="control-label" for="emailId">Email Id</label>
+            <input disabled="disabled" class="form-control" id="emailId" type="text" ng-model="main.user.userEmailId">
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="emailId">My Home Town</label>
+            <input disabled="disabled" class="form-control" id="homeTown" type="text" ng-model="main.user.homeTown">
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="emailId">My School</label>
+            <input disabled="disabled" class="form-control" id="school" type="text" ng-model="main.user.school">
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="emailId">Worked At</label>
+            <input disabled="disabled" class="form-control" id="workedAt" type="text" ng-model="main.user.workedAt">
+        </div>
+    </form>
+</div>
 
 
 </body>
 </html>
+

@@ -11,9 +11,9 @@ var session = require('express-session');
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(express.static(__dirname));
 app.use(session({secret:'rubi.saini@intelligrape.com'}));
+
 //Include mongoose into project
 var mongoose = require('mongoose');
-var userData;
 
 //Create a data base
 var URLString ='mongodb://localhost/FriendsterDB';
@@ -43,14 +43,21 @@ var IntelliInfoSchema = new mongoose.Schema({
     workedAt:{type:String},
     sessionId:{type:Number},
     gender:{type:String},
-    dateOfBirth:{type:String}
+    dateOfBirth:{type:String},
+    school:{type:String},
+    profilePic:{type:String},
+    post:[String]
 
 });
 
+app.use(bodyParser());
+
 // Create a instance of collection
 var ExpressUsers = mongoose.model('FriendsterUsers', IntelliInfoSchema);
+
+
 app.get('/user', function(req, res) {
-    ExpressUsers.find({_id:userData},{}).limit(0).exec(function(err, result) {
+    ExpressUsers.find({_id:req.session.userData},{}).limit(0).exec(function(err, result) {
         if (err) {
             //callback(err);
             res.json({status:0});
@@ -79,7 +86,7 @@ app.post('/user', function(req, res) {
     });
 });
 
-app.put('/user/:id', function(req, res) {
+/*app.put('/user/:id', function(req, res) {
     // Update user information
     console.log('user id  ' + req.param.id);
     if(req.param('id') == undefined){
@@ -93,25 +100,27 @@ app.put('/user/:id', function(req, res) {
                 res.send('Update record ' + result);
         });
     }
+});*/
+
+app.put('/user', function(req, res) {
+    // Update user information
+    if(req.session.userData == undefined){
+        res.json({status:0});
+    }else {
+         ExpressUsers.update({_id:req.session.userData},req.body,function(err,result){
+             if (err) {
+                 res.json({status:0});
+             }else{
+                 res.json({status:1});
+             }
+         });
+    }
 });
 
 app.post('/logout', function(req, res) {
-    console.log("logout method ------" +userData);
+    req.session.userData = undefined;
+    res.json({status:1});
 
-   res.json({user:userData});
-   /* // Update user information
-    console.log('user id  ' + req.param.id);
-    if(req.param('id') == undefined){
-        res.send('Missing user id');
-    }else {
-        ExpressUsers.update({id:req.param('id')},{sessionId:0},function(err,result){
-            if (err) {
-                res.json({status:0});
-            }else{
-                res.json({status:2});
-            }
-        });
-    }*/
 });
 
 app.put('/validate', function(req, res) {
@@ -152,14 +161,12 @@ app.post('/login', function(req, res) {
             res.json({status:0});
         }
        else{
-            userData = result[0]._id;
+            req.session.userData = result[0]._id;
             if(result != undefined && result != ""){
-                ExpressUsers.update({_id:userData},{sessionId:1},function(err,updatedResult){
+                ExpressUsers.update({_id:req.session.userData},{sessionId:1},function(err,updatedResult){
                     if (err) {
-                        console.log('Update session variable error  ' + err);
                         res.json({status:0});
                     }else{
-                        console.log('Update session variable  ' + userData + '  ' + result);
                        // req.session.id = userId;
                         res.json({status:1});
                     }
@@ -183,17 +190,101 @@ app.post('/submit', function(req, res) {
 
 });
 
-
-app.post('/session', function(req, res) {
-
-    new ExpressUsers(req.body).save(function (err) {
+app.post('/findFriend', function(req, res) {
+    var searchData = req.body.value;
+    ExpressUsers.find({firstName:new RegExp(searchData, 'i'), _id:{$ne:req.session.userData}}).limit(0).exec(function(err, result) {
         if (err) {
             res.json({status:0});
-        } else {
+        }else{
+            console.log('result' + result);
+            var findData = {
+                status:1,
+                friends:result
+            };
+            res.json(findData);
+        }
+    });
+});
+
+app.post('/post', function(req, res) {
+    var message = req.body.post;
+
+    var hh = {};
+    hh.post = [];
+    hh.post.push(message);
+
+    ExpressUsers.update({_id:req.session.userData},{$push:{post:message}},function(err,result){
+        if (err) {
+            res.json({status:0});
+        }else{
             res.json({status:1});
         }
     });
-
 });
 
-http.createServer(app).listen(3000);
+app.post('/sendFriendRequest', function(req, res) {
+    var senderId = req.body.id;
+    var sendData = {
+        id:req.session.userData,
+        status:'new',
+        name:req.body.senderName
+    };
+    ExpressUsers.update({_id:senderId},{$addToSet:{friends:sendData}},function(err,result){
+        if (err) {
+            res.json({status:0});
+        }else{
+            sendData = {
+                id:senderId,
+                status:'send',
+                name:req.body.receiverName
+            };
+
+ExpressUsers.update({_id:req.session.userData},{$addToSet:{friends:sendData}},function(err,result){
+                if (err) {
+                    res.json({status:0});
+                }else{
+                    res.json({status:1});
+                }
+            });
+        }
+    });
+});
+
+app.post('/respondFriendRequest', function(req, res) {
+    var senderId = req.body.id;
+    var status = req.body.status;
+
+    ExpressUsers.update({_id:senderId, 'friends.id':req.session.userData},{$set: {'friends.$.status':status}},function(err,result){
+        if (err) {
+            res.json({status:0});
+        }else{
+
+            ExpressUsers.update({_id:req.session.userData, 'friends.id':senderId},{$set: {'friends.$.status':status}},function(err,result){
+                if (err) {
+                    res.json({status:0});
+                }else{
+                    res.json({status:1});
+                }
+            });
+        }
+    });
+});
+
+// Handle page routing
+app.get('/', function(req, res){
+    res.redirect('index.html');
+});
+app.get('/index', function(req, res){
+    res.redirect('index.html');
+});
+
+app.get('/UserProfile', function(req, res){
+    if(req.session.userData){
+        res.redirect('UserProfile.html');
+    }else{
+        res.redirect('index.html');
+    }
+});
+
+
+http.createServer(app).listen(3002);

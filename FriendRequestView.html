@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="fbApp" ng-controller="friendRequestController">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div>
+    <table width="600px" frame="box" style="background-color: #66FF99; margin-top: 30px">
+        <tr ng-repeat="friend in main.newFriends">
+            <td>
+                <img id="userProfilePic" class="img-responsive" src="img/user-icon.png" alt="" width="70px" height="70px">
+            </td>
+            <td>
+                {{friend.name}}
+            </td>
+            <td width="70px">
+                <input class="btn btn-info" type="BUTTON" VALUE="Accept" ng-click='acceptFriendRequest(friend.id)' align="right"/>
+            </td>
+            <td width="70px">
+                <input class="btn btn-info" type="BUTTON" VALUE="Reject" ng-click='rejectFriendRequest(friend.id)' align="right"/>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

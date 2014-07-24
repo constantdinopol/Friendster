@@ -3,29 +3,71 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <script>
+     function closeButtonListener(){
+         document.getElementById('searchDivId').setAttribute('hidden','hidden');
+     }
+    </script>
 </head>
 <body>
 <div style="margin-left: 100px; margin-top: 20px; width:500px">
+
     <table width="400px">
         <tr>
             <td>
-                <img border="0" src="img/images1.jpeg" width="120" height="100">
-            </td>
-            <td>Rakhi</td>
+                <input class="form-control" id="name" placeholder="Search your friend..." type="text" width="300px">
+               </td>
             <td>
-                <input type="button" value="Remove">
+                <p></p>
+                <p></p>
             </td>
-        </tr>
-        <tr>
             <td>
-                <img border="0" src="img/images2.jpeg" width="120" height="100">
-            </td>
-            <td>Ruchi</td>
-            <td>
-                <input type="button" value="Remove">
+                <input class="btn btn-info" type="button" value="Search" ng-click="searchFriend()"/>
             </td>
         </tr>
     </table>
+    <p></p>
+    <p></p>
+    <div id="searchDivId" style="width: 600px" hidden="hidden">
+        <input type="BUTTON" VALUE="X" style="float: right" onclick="closeButtonListener()"/>
+        <table width="600px" frame="box" style="background-color: #66FF99">
+            <tr ng-repeat="friend in friends">
+                <td>
+                    <img id="userProfilePic" class="img-responsive" src="img/user-icon.png" alt="" width="70px" height="70px">
+                </td>
+                <td>
+                    {{friend.name}}
+                </td>
+                <td width="70px">
+                    <input class="btn btn-info" type="BUTTON" VALUE="Add" ng-click='sendFriendRequest(friend.id, friend.name)' align="right"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <div style="width: 600px">
+        <p><b>My Friends...</b></p>
+        <table width="600px" frame="box" style="background-color: #d59392">
+            <tr ng-repeat="myFriend in main.myFriends">
+                <td>
+                    <img class="img-responsive" src="img/user-icon.png" alt="" width="70px" height="70px">
+                </td>
+                <td>
+                    {{myFriend.name}}
+                </td>
+               <!-- <td width="70px">
+                    <input  class="btn btn-info" type="BUTTON" VALUE="Add" align="right"/>
+                </td>-->
+            </tr>
+        </table>
+    </div>
+
+    <!-- </div>-->
+
+   <!-- </form>-->
 </div>
 
 </body>

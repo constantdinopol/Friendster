@@ -182,6 +182,52 @@ fbApp.controller('profileController', ['$scope', '$http', function ($scope, $htt
 
 fbApp.controller('friendController', ['$scope', '$http', function ($scope, $http) {
     $scope.friends = [];
+    $scope.main = {};
+    $scope.main.user = {};
+    $scope.main.newFriends = [];
+    $scope.main.myFriends = [];
+
+    $http.get('/user').success(function (data) {
+        var fullName = data[0].firstName;
+        if (data[0].lastName != undefined && data[0].lastName != "") {
+            fullName += " " + data[0].lastName;
+        }
+        $scope.main.user = {
+            firstName: data[0].firstName,
+            lastName: data[0].lastName,
+            userName: fullName,
+            userEmailId: data[0].email,
+            gender: data[0].gender,
+            dateOfBirth: data[0].dateOfBirth,
+            pics: data[0].pics,
+            friends: data[0].friends,
+            homeTown: data[0].homeTown,
+            workedAt: data[0].workedAt,
+            school: data[0].school
+        }
+
+        if (data[0].friends) {
+            if (data[0].friends.length > 0) {
+                for (var i = 0; i < data[0].friends.length; i++) {
+
+                    var newFriend = data[0].friends[i];
+                    if (newFriend.status == "new") {
+                        $scope.main.newFriends.push(newFriend);
+                    } else if(newFriend.status == "Accept"){
+                        $scope.main.myFriends.push(newFriend);
+
+                    }
+                }
+            }
+        }
+        var userProfile = document.getElementById('userProfilePic');
+        if ($scope.main.user.gender == "Female") {
+            userProfile.src = "img/F_profile.jpeg";
+        } else {
+            userProfile.src = "img/M_profile.jpeg"
+        }
+    });
+
     $scope.searchFriend = function () {
         var data =
         {
@@ -210,9 +256,10 @@ fbApp.controller('friendController', ['$scope', '$http', function ($scope, $http
         $http.post('/sendFriendRequest', data).success(function (data) {
             if (data.status == 1) {
                 alert('Send friend request successfully');
-            } else {
+                $scope.friends = [];
+            }
+             else {
                 alert('Some error occurred to send friend request');
-
             }
         });
     }
@@ -239,6 +286,52 @@ fbApp.controller('homeController', ['$scope', '$http', function ($scope, $http) 
 }]);
 
 fbApp.controller('friendRequestController', ['$scope', '$http', function ($scope, $http) {
+    $scope.main = {};
+    $scope.main.user = {};
+    $scope.main.newFriends = [];
+    $scope.main.myFriends = [];
+
+    $http.get('/user').success(function (data) {
+        var fullName = data[0].firstName;
+        if (data[0].lastName != undefined && data[0].lastName != "") {
+            fullName += " " + data[0].lastName;
+        }
+        $scope.main.user = {
+            firstName: data[0].firstName,
+            lastName: data[0].lastName,
+            userName: fullName,
+            userEmailId: data[0].email,
+            gender: data[0].gender,
+            dateOfBirth: data[0].dateOfBirth,
+            pics: data[0].pics,
+            friends: data[0].friends,
+            homeTown: data[0].homeTown,
+            workedAt: data[0].workedAt,
+            school: data[0].school
+        }
+
+        if (data[0].friends) {
+            if (data[0].friends.length > 0) {
+                for (var i = 0; i < data[0].friends.length; i++) {
+
+                    var newFriend = data[0].friends[i];
+                    if (newFriend.status == "new") {
+                        $scope.main.newFriends.push(newFriend);
+                    } else if(newFriend.status == "Accept"){
+                        $scope.main.myFriends.push(newFriend);
+
+                    }
+                }
+            }
+        }
+        var userProfile = document.getElementById('userProfilePic');
+        if ($scope.main.user.gender == "Female") {
+            userProfile.src = "img/F_profile.jpeg";
+        } else {
+            userProfile.src = "img/M_profile.jpeg"
+        }
+    });
+
 
     // create a message to display in our view
     $scope.acceptFriendRequest = function (senderId) {
@@ -249,6 +342,51 @@ fbApp.controller('friendRequestController', ['$scope', '$http', function ($scope
         $http.post('/respondFriendRequest', data).success(function (data) {
             if (data.status == 1) {
                 alert('You have accept a new friend request');
+                $scope.main = {};
+                $scope.main.user = {};
+                $scope.main.newFriends = [];
+                $scope.main.myFriends = [];
+
+                $http.get('/user').success(function (data) {
+                    var fullName = data[0].firstName;
+                    if (data[0].lastName != undefined && data[0].lastName != "") {
+                        fullName += " " + data[0].lastName;
+                    }
+                    $scope.main.user = {
+                        firstName: data[0].firstName,
+                        lastName: data[0].lastName,
+                        userName: fullName,
+                        userEmailId: data[0].email,
+                        gender: data[0].gender,
+                        dateOfBirth: data[0].dateOfBirth,
+                        pics: data[0].pics,
+                        friends: data[0].friends,
+                        homeTown: data[0].homeTown,
+                        workedAt: data[0].workedAt,
+                        school: data[0].school
+                    }
+
+                    if (data[0].friends) {
+                        if (data[0].friends.length > 0) {
+                            for (var i = 0; i < data[0].friends.length; i++) {
+
+                                var newFriend = data[0].friends[i];
+                                if (newFriend.status == "new") {
+                                    $scope.main.newFriends.push(newFriend);
+                                } else if(newFriend.status == "Accept"){
+                                    $scope.main.myFriends.push(newFriend);
+
+                                }
+                            }
+                        }
+                    }
+                    var userProfile = document.getElementById('userProfilePic');
+                    if ($scope.main.user.gender == "Female") {
+                        userProfile.src = "img/F_profile.jpeg";
+                    } else {
+                        userProfile.src = "img/M_profile.jpeg"
+                    }
+                });
             } else {
                 alert('Some error occurred to accept this friend request');
 
@@ -266,6 +404,51 @@ fbApp.controller('friendRequestController', ['$scope', '$http', function ($scope
         $http.post('/respondFriendRequest', data).success(function (data) {
             if (data.status == 1) {
                 alert('You have reject a new friend request');
+                $scope.main = {};
+                $scope.main.user = {};
+                $scope.main.newFriends = [];
+                $scope.main.myFriends = [];
+
+                $http.get('/user').success(function (data) {
+                    var fullName = data[0].firstName;
+                    if (data[0].lastName != undefined && data[0].lastName != "") {
+                        fullName += " " + data[0].lastName;
+                    }
+                    $scope.main.user = {
+                        firstName: data[0].firstName,
+                        lastName: data[0].lastName,
+                        userName: fullName,
+                        userEmailId: data[0].email,
+                        gender: data[0].gender,
+                        dateOfBirth: data[0].dateOfBirth,
+                        pics: data[0].pics,
+                        friends: data[0].friends,
+                        homeTown: data[0].homeTown,
+                        workedAt: data[0].workedAt,
+                        school: data[0].school
+                    }
+
+                    if (data[0].friends) {
+                        if (data[0].friends.length > 0) {
+                            for (var i = 0; i < data[0].friends.length; i++) {
+
+                                var newFriend = data[0].friends[i];
+                                if (newFriend.status == "new") {
+                                    $scope.main.newFriends.push(newFriend);
+                                } else if(newFriend.status == "Accept"){
+                                    $scope.main.myFriends.push(newFriend);
+
+                                }
+                            }
+                        }
+                    }
+                    var userProfile = document.getElementById('userProfilePic');
+                    if ($scope.main.user.gender == "Female") {
+                        userProfile.src = "img/F_profile.jpeg";
+                    } else {
+                        userProfile.src = "img/M_profile.jpeg"
+                    }
+                });
             } else {
                 alert('Some error occurred to reject this friend request');
 

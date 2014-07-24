@@ -192,11 +192,10 @@ app.post('/submit', function(req, res) {
 
 app.post('/findFriend', function(req, res) {
     var searchData = req.body.value;
-    ExpressUsers.find({firstName:new RegExp(searchData, 'i'), _id:{$ne:req.session.userData}}).limit(0).exec(function(err, result) {
+    ExpressUsers.find({firstName:new RegExp(searchData, 'i'), _id:{$ne:req.session.userData}, 'friends.id':{$ne:req.session.userData}}).limit(0).exec(function(err, result) {
         if (err) {
             res.json({status:0});
         }else{
-            console.log('result' + result);
             var findData = {
                 status:1,
                 friends:result
